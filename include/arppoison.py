@@ -26,6 +26,11 @@ class ARPPoison():
 
         # self.targets_mac = list([self.get_mac_address(i) for i in self.targets])
         self.g_mac       = self.get_mac_address(gateway)
+        
+        for i,x in self.targets:
+            if not x:
+                logging.critical("Error getting mac addresses")
+                raise Error("Error getting mac addresses")
         if not self.targets or not self.g_mac: logging.critical("Error getting mac addresses");raise Error("Error getting mac addresses")
 
         init()

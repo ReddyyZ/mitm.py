@@ -81,7 +81,7 @@ class ARPPoison():
     def main(self):
         logging.info(f"Gateway MAC: {self.g_mac}")
         for target, t_mac in self.targets:
-            logging.info(f"{target} Target MAC: {t_mac}")
+            logging.info(f"Target {target} MAC: {t_mac}")
 
         try:
             while True:

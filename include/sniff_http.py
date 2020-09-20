@@ -40,7 +40,7 @@ class HttpSniff(object):
 			    raw = pkt[Raw].load
 		
 		    with open(self.http_file,"a+") as fd:
-			    fd.write(f"{method} from {ip} to {url} {f'- Data: {raw}' if raw else ''}\n")
+			    fd.write(f"{method} from {ip} to {url} {f'- Data: {raw}' if raw else ''}\n\n")
 		
 		    logging.info(f"HTTP {method} request from {ip} to {url}")
 		
@@ -54,3 +54,13 @@ class HttpSniff(object):
 	def stop(self):
 		self.main_thread.kill()
 		return (self.pcap_path, self.http_file)
+
+if __name__ == "__main__":
+    http = HttpSniff(verbose=True)
+    http.start()
+
+    try:
+        while True:
+            time.sleep(0.1)
+    except KeyboardInterrupt:
+        print(http.stop())

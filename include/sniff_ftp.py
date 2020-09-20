@@ -67,7 +67,7 @@ class FTPSniff(object):
                         user = self.usernames[-1].replace("\r\n","").replace("\\r\\n","")
                         passwd = self.passwords[-1].replace("\r\n","").replace("\\r\\n","")
                         fd.write(f"{self.addrs[-1][0]} -> {self.addrs[-1][1]}:\n   Username: {user}\n   Password: {passwd}\n\n")
-                        logging.info(f"{self.addrs[-1][0]} -> {self.addrs[-1][1]}:\n\tUsername: {user}\n\tPassword: {passwd}\n\n")
+                        logging.info(f"{self.addrs[-1][0]} -> {self.addrs[-1][1]}:\n\tUsername: {user}\n\tPassword: {passwd}")
             except:
                 pass
 

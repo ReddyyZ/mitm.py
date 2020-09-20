@@ -1,2 +1,1 @@
-rpycolors>=0.0.3
 scapy>=2.4.3

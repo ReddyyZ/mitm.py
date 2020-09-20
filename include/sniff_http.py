@@ -9,6 +9,7 @@ class HttpSniff(object):
 		self.pcap_path = pcap_path
 		self.http_file = http_file
 		self.main_thread = None
+		logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.DEBUG if verbose else logging.WARNING)
 		
 	def handle_packet(self, pkt):
 		if pkt.haslayer(HTTPRequest):

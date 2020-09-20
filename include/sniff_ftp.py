@@ -10,10 +10,11 @@ class FTPSniff(object):
         self.main_thread = None
         self.usernames   = []
         self.passwords   = []
+        logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.DEBUG if verbose else logging.WARNING)
 		
     def check_login(self, pkt, username, passwd):
         if '230' in pkt[Raw].load:
-            logging.debug("Login found")
+            logging.info(f"FTP Login - USER: {username} PASS: {passwd}")
             return True
         else:
             return False
@@ -37,11 +38,9 @@ class FTPSniff(object):
         if 'USER ' in data:
             user = data.split("USER ")[1].strip()
             self.usernames.append(user)
-            # fd.write(f"FTP - USER: {user} ")
         elif 'PASS ' in data:
             passwd = data.split("PASS ")[1].strip()
             self.passwords.append(passwd)
-            # fd.write(f"PASS: {passwd}\n")
         else:
             if self.check_login(pkt,self.usernames[-1],self.passwords[-1]):
                 with open(self.ftp_file, "a+") as fd:

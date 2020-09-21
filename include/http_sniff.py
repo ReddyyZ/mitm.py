@@ -14,6 +14,9 @@ yellow  = Fore.YELLOW
 green   = Fore.GREEN
 magenta = Fore.MAGENTA
 
+def percentage(percent, whole):
+	return (percent * whole) / 100.0
+
 class HttpSniff(object):
 	x = random.randint(1000,9999)
 	def __init__(self,pcap_path=f"files/{x}-http.pcap", http_file=f"files/{x}-http.log",verbose=False):
@@ -25,8 +28,8 @@ class HttpSniff(object):
 		logging.addLevelName(logging.CRITICAL, f"[{red}!!{reset}]")
 		logging.addLevelName(logging.WARNING, f"[{red}!{reset}]")
 		logging.addLevelName(logging.INFO, f"[{cyan}*{reset}]")
-		logging.addLevelName(logging.DEBUG, f"[{cyan}**{reset}]")
-		logging.basicConfig(format=f"%(levelname)s %(message)s", level=logging.DEBUG if verbose else logging.WARNING)
+		logging.addLevelName(logging.DEBUG, f"[{magenta}*{reset}]")
+		logging.basicConfig(format=f"%(levelname)s %(message)s", level=logging.DEBUG if verbose else logging.DEBUG)
 		
 	def handle_packet(self, pkt):
 		if pkt.haslayer(HTTPRequest):
@@ -42,16 +45,18 @@ class HttpSniff(object):
 		    with open(self.http_file,"a+") as fd:
 			    fd.write(f"{method} from {ip} to {url} {f'- Data: {raw.decode()}' if raw else ''}\n\n")
 		
-		    logging.info(f"HTTP {method} request from {ip} to {url}")
+		    logging.info(f"HTTP {method} request from {ip} to {url[0:100]}")
 		
 	def sniff_thread(self):
-		sniff(filter="port 80", prn=self.handle_packet)
+		sniff(prn=self.handle_packet)
 		
 	def start(self):
+		logging.debug("HTTP: Starting sniff thread")
 		self.main_thread = Process(target=self.sniff_thread)
 		self.main_thread.start()
 		
 	def stop(self):
+		logging.debug("HTTP: Sniff thread stopped")
 		self.main_thread.kill()
 		return (self.pcap_path, self.http_file)
 

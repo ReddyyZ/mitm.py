@@ -27,8 +27,8 @@ class FTPSniff(object):
         logging.addLevelName(logging.CRITICAL, f"[{red}!!{reset}]")
         logging.addLevelName(logging.WARNING, f"[{red}!{reset}]")
         logging.addLevelName(logging.INFO, f"[{cyan}*{reset}]")
-        logging.addLevelName(logging.DEBUG, f"[{cyan}**{reset}]")
-        logging.basicConfig(format=f"%(levelname)s %(message)s", level=logging.DEBUG if verbose else logging.WARNING)
+        logging.addLevelName(logging.DEBUG, f"[{magenta}*{reset}]")
+        logging.basicConfig(format=f"%(levelname)s %(message)s", level=logging.DEBUG if verbose else logging.INFO)
 
     def check_login(self, pkt, username, passwd):
         if b'230' in pkt[Raw].load:
@@ -72,15 +72,15 @@ class FTPSniff(object):
                 pass
 
     def sniff_thread(self):
-        logging.info("Sniff started")
         sniff(filter="port 21",prn=self.handle_pkt)
     
     def start(self):
-        logging.info("Starting")
+        logging.debug("FTP: Starting sniff thread")
         self.main_thread = Process(target=self.sniff_thread)
         self.main_thread.start()
     
     def stop(self):
+        logging.debug("FTP: Sniff thread stopped")
         self.main_thread.kill()
         return (self.pcap_path, self.ftp_file)
 

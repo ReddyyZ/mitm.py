@@ -83,9 +83,6 @@ class MITM(object):
                 "logs": y,
             }
         print("")
-        pcap = "pcap"
-        logs = "logs"
-        nl = "\n"
         logging.info("Log files:")
         for key in self.files.keys():
             print(f"    {key}:\n      PCAP: {self.files[key]['pcap']}\n      LOGS: {self.files[key]['logs']}")

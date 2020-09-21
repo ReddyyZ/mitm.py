@@ -36,12 +36,14 @@ class MITM(object):
     def __init__(self):
         self.arp, self.http, self.ftp, self.gateway, self.targets, self.verbose = arguments()
 
+        self.files = {}
+
         init()
         logging.addLevelName(logging.CRITICAL, f"[{red}!!{reset}]")
         logging.addLevelName(logging.WARNING, f"[{red}!{reset}]")
         logging.addLevelName(logging.INFO, f"[{cyan}*{reset}]")
         logging.addLevelName(logging.DEBUG, f"[{cyan}**{reset}]")
-        logging.basicConfig(format="%(levelname)s %(message)s", level=logging.DEBUG if self.verbose else logging.WARNING)
+        logging.basicConfig(format="%(levelname)s %(message)s", level=logging.DEBUG if self.verbose else logging.INFO)
         self._arp()
         self._http()
         self._ftp()
@@ -69,9 +71,24 @@ class MITM(object):
         if self.arp:
             self.arp.stop()
         if self.http:
-            self.http.stop()
+            x, y = self.http.stop()
+            self.files["HTTP"] = {
+                "pcap": x,
+                "logs": y,
+            }
         if self.ftp:
-            self.ftp.stop()
+            x, y = self.ftp.stop()
+            self.files["FTP"] = {
+                "pcap": x,
+                "logs": y,
+            }
+        print("")
+        pcap = "pcap"
+        logs = "logs"
+        nl = "\n"
+        logging.info("Log files:")
+        for key in self.files.keys():
+            print(f"    {key}:\n      PCAP: {self.files[key]['pcap']}\n      LOGS: {self.files[key]['logs']}")
 
 if __name__ == "__main__":
     mitm = MITM()
@@ -80,3 +97,4 @@ if __name__ == "__main__":
             time.sleep(0.1)
     except KeyboardInterrupt:
         mitm.stop()
+        

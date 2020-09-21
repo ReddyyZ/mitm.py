@@ -40,7 +40,7 @@ class HttpSniff(object):
 			    raw = pkt[Raw].load
 		
 		    with open(self.http_file,"a+") as fd:
-			    fd.write(f"{method} from {ip} to {url} {f'- Data: {raw}' if raw else ''}\n\n")
+			    fd.write(f"{method} from {ip} to {url} {f'- Data: {raw.decode()}' if raw else ''}\n\n")
 		
 		    logging.info(f"HTTP {method} request from {ip} to {url}")
 		

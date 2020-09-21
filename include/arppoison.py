@@ -37,8 +37,8 @@ class ARPPoison():
         logging.addLevelName(logging.CRITICAL, f"[{red}!!{reset}]")
         logging.addLevelName(logging.WARNING, f"[{red}!{reset}]")
         logging.addLevelName(logging.INFO, f"[{cyan}*{reset}]")
-        logging.addLevelName(logging.DEBUG, f"[{cyan}**{reset}]")
-        logging.basicConfig(format="%(levelname)s %(message)s", level=logging.DEBUG if verbose else logging.WARNING)
+        logging.addLevelName(logging.DEBUG, f"[{magenta}*{reset}]")
+        logging.basicConfig(format="%(levelname)s %(message)s", level=logging.DEBUG if verbose else logging.INFO)
 
     def get_mac_address(self,t_ip : str):
         try:
@@ -66,6 +66,7 @@ class ARPPoison():
 
     def start(self):
         try:
+            logging.debug("ARP: Starting sniff thread")
             self.main_thread = Process(target=self.main)
             self.main_thread.start()
         except:
@@ -75,6 +76,7 @@ class ARPPoison():
     def stop(self):
         try:
             self.main_thread.kill()
+            logging.debug("ARP: Sniff thread stopped")
         except:
             logging.critical("An error ocurred trying to kill main thread")
             raise Error("An error ocurred trying to kill main thread")
@@ -84,9 +86,9 @@ class ARPPoison():
             self.restore_arp(target,t_mac, self.gateway,self.g_mac)
 
     def main(self):
-        logging.info(f"Gateway MAC: {self.g_mac}")
+        logging.debug(f"ARP: Gateway MAC: {self.g_mac}")
         for target, t_mac in self.targets:
-            logging.info(f"Target {target} MAC: {t_mac}")
+            logging.debug(f"ARP: Target {target} MAC: {t_mac}")
 
         try:
             while True:

@@ -57,7 +57,7 @@ class MITM(object):
     def _arp(self):
         if self.arp:
             logging.info("Starting ARP Poisoning Attack")
-            self.arp = arppoison.ARPPoison(self.targets,self.gateway,self.verbose)
+            self.arp = arppoison.ARPPoison(targets=self.targets,gateway=self.gateway,verbose=self.verbose)
             self.arp.start()
 
     def _http(self):

@@ -1,7 +1,10 @@
 from include import arppoison, ftp_sniff, http_sniff
 from colorama import init, Fore
 import argparse,textwrap,time,logging
-#
+
+VERSION = "1.0.0"
+AUTHOR  = "ReddyyZ"
+
 white   = Fore.WHITE
 black   = Fore.BLACK
 red     = Fore.RED
@@ -14,7 +17,9 @@ magenta = Fore.MAGENTA
 
 def arguments():
     parser = argparse.ArgumentParser(prog="mitm.py",formatter_class=argparse.RawDescriptionHelpFormatter,
-                                    description=textwrap.dedent("""
+                                    description=textwrap.dedent(f"""
+                                                    MITM.PY - v{VERSION}
+
                                         Tool for MITM attacks developed by ReddyyZ
                                         Developed with educational purposes!
                                         Github: https://github.com/ReddyyZ/MITM.py

@@ -60,3 +60,11 @@ To configure the hosts for DNS Spoofing attacks, you need to change the [config/
 
 Set the key name as the host, and the value as the IP to be redirected.
 And remember to add the '.' at the end.
+
+## :open_book: Examples
+
+- Poisoning the ARP and executing DNS Spoofing
+```sh
+python mitm.py --arp --dns --gateway 192.168.1.1 --targets 192.168.1.106/192.168.1.104
+```
+> Remember to change the `config/hosts.json` file

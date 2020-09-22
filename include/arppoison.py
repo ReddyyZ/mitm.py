@@ -1,7 +1,7 @@
 from scapy.all import *
 from multiprocessing import Process
 from colorama import init, Fore
-import logging
+import logging,subprocess
 
 white   = Fore.WHITE
 black   = Fore.BLACK
@@ -17,20 +17,23 @@ class Error(Exception):
     pass
 
 class ARPPoison():
-    def __init__(self,targets,gateway,verbose=1):
+    def __init__(self,gateway,targets="",verbose=1):
         self.gateway = gateway
         self.targets = []
-        # self.targets = list(targets.split("/"))
         for x in list(targets.split("/")):
             self.targets.append((x,self.get_mac_address(x)))
 
-        # self.targets_mac = list([self.get_mac_address(i) for i in self.targets])
+        if not self.targets:
+            self.targets = self.discover_net(self.gateway)
+            self.targets = [(x,self.get_mac_address(x)) for x in self.targets]
+
         self.g_mac       = self.get_mac_address(gateway)
         
         for i,x in self.targets:
             if not x:
-                logging.critical("Error getting mac addresses")
-                raise Error("Error getting mac addresses")
+                logging.error(f"Error getting mac address from {i}")
+                # raise Error("Error getting mac addresses")
+                self.targets.remove((i,x))
         if not self.targets or not self.g_mac: logging.critical("Error getting mac addresses");raise Error("Error getting mac addresses")
 
         init()
@@ -39,6 +42,17 @@ class ARPPoison():
         logging.addLevelName(logging.INFO, f"[{cyan}*{reset}]")
         logging.addLevelName(logging.DEBUG, f"[{magenta}*{reset}]")
         logging.basicConfig(format="%(levelname)s %(message)s", level=logging.DEBUG if verbose else logging.INFO)
+
+    def discover_net(self,gateway):
+        gateway = gateway[:-1]
+        hosts = []
+
+        for i in range(1,254):
+            res = subprocess.call(['ping', '-c', '3'], gateway+str(i))
+            if res == 0:
+                hosts.append(gateway+str(i))
+
+        return hosts
 
     def get_mac_address(self,t_ip : str):
         try:

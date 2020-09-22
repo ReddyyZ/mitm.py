@@ -19,7 +19,7 @@ mitm.py
 - [x] FTP Sniffing
 - [x] HTTP Sniffing
 - [ ] DNS Spoofing
-- [x] Captive Portal
+- [ ] Captive Portal
 
 ## Installation
 

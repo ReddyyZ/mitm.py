@@ -75,8 +75,10 @@ python3 mitm.py --http -v
 ```
 > All requests will be saved at `files` directory
 
-- Sniffing all FTP logins
+- Sniffing all FTP credentials
 ```sh
 python3 mitm.py --ftp -v
 ```
-> All requests will be saved at `files` directory
+> All credentials will be saved at `files` directory
+
+<h2 align="center">&lt;/&gt; by <a href="https://github.com/ReddyyZ">ReddyyZ</a></h2>

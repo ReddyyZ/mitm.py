@@ -39,7 +39,7 @@ git clone https://github.com/ReddyyZ/mitm.py
 
 - Cd into the directory and install the requirements:
 ```sh
-pip3 install -r requirements.txt
+cd mitm.py && pip3 install -r requirements.txt
 ```
 
 - Happy hacking!

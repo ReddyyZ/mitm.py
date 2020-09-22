@@ -46,3 +46,17 @@ cd mitm.py && pip3 install -r requirements.txt
 ```sh
 python3 mitm.py --help
 ```
+
+## :gear: Configuring
+
+To configure the hosts for DNS Spoofing attacks, you need to change the [config/hosts.json](config/hosts.json), following these instructions:
+
+```json
+{
+    "kali.ada.": "192.168.1.105",
+    "test.root.": "192.168.1.105"
+}
+```
+
+Set the key name as the host, and the value as the IP to be redirected.
+And remember to add the '.' at the end.

@@ -30,7 +30,7 @@ def arguments():
     parser.add_argument("--ftp",help="Sniff FTP logins",action="count")
     parser.add_argument("--dns",help="Spoof DNS",action="count")
     parser.add_argument("-G","--gateway",help="Gateway IP for ARP Poisoning attacks",metavar="IP")
-    parser.add_argument("-T","--targets",help="Targets IPs separated by /",metavar="IP")
+    parser.add_argument("-T","--targets",help="Targets IPs separated by /",metavar="IP",default="")
     parser.add_argument("-v","--verbose",action="count")
 
     args = parser.parse_args()
@@ -63,19 +63,19 @@ class MITM(object):
     def _http(self):
         if self.http:
             logging.info("Starting HTTP Sniff Attack")
-            self.http = http_sniff.HttpSniff(verbose=self.verbose)
+            self.http = http_sniff.HttpSniff(verbose=self.verbose,targets=self.targets)
             self.http.start()
 
     def _ftp(self):
         if self.ftp:
             logging.info("Starting FTP Sniff Attack")
-            self.ftp = ftp_sniff.FTPSniff(verbose=self.verbose)
+            self.ftp = ftp_sniff.FTPSniff(verbose=self.verbose,targets=self.targets)
             self.ftp.start()
 
     def _dns(self):
         if self.dns:
             logging.info("Starting DNS Spoofing Attack")
-            self.dns = dnsspoof.DNSSpoof(verbose=self.verbose)
+            self.dns = dnsspoof.DNSSpoof(verbose=self.verbose,targets=self.targets)
             self.dns.start()
 
     def stop(self):

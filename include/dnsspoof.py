@@ -14,12 +14,13 @@ green   = Fore.GREEN
 magenta = Fore.MAGENTA
 
 class DNSSpoof(object):
-    def __init__(self,verbose=False):
+    def __init__(self,verbose=False,targets=""):
         self.main_thread = None
         self.interface   = "eth0"
         self.iface_info  = netifaces.ifaddresses(self.interface)
         self.local_ip    = self.iface_info[netifaces.AF_INET][0]['addr']
         self.local_mac   = self.iface_info[netifaces.AF_LINK][0]['addr']
+        self.targets	= list(targets.split("/"))
 
         init()
         logging.addLevelName(logging.CRITICAL, f"[{red}!!{reset}]")
@@ -55,7 +56,15 @@ class DNSSpoof(object):
                     logging.debug(f"DNS: Spoofed request from {pkt[IP].src} for {name} to {conf[name]}")
 
     def sniff_thread(self):
-        sniff(prn=self.handle_pkt)
+        filter_ = ""
+        if self.targets:
+            for t in self.targets:
+                if len(filter_) > 0:
+                    filter_ += " and host " + t
+                else:
+                    filter_ += "host " + t
+
+        sniff(filter=filter_,prn=self.handle_pkt)
 
     def start(self):
         self.main_thread = Process(target=self.sniff_thread)

@@ -19,10 +19,11 @@ def percentage(percent, whole):
 
 class HttpSniff(object):
 	x = random.randint(1000,9999)
-	def __init__(self,pcap_path=f"files/{x}-http.pcap", http_file=f"files/{x}-http.log",verbose=False):
+	def __init__(self,pcap_path=f"files/{x}-http.pcap", http_file=f"files/{x}-http.log",verbose=False,targets=""):
 		self.pcap_path = pcap_path
-		self.http_file = http_file
+		self.http_file = http_file 
 		self.main_thread = None
+		self.targets	= list(targets.split("/"))
 
 		init()
 		logging.addLevelName(logging.CRITICAL, f"[{red}!!{reset}]")
@@ -48,6 +49,7 @@ class HttpSniff(object):
 		    logging.info(f"HTTP {method} request from {ip} to {url[0:100]}")
 		
 	def sniff_thread(self):
+		filter_ = f"port 80 and port 443 and port 8000 and port 8080{f' and host {x}' for x in self.targets}"
 		sniff(prn=self.handle_packet)
 		
 	def start(self):

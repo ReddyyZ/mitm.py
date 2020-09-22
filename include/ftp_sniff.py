@@ -15,13 +15,14 @@ magenta = Fore.MAGENTA
 
 class FTPSniff(object):
     x = random.randint(1000,9999)
-    def __init__(self,pcap_path=f"files/{x}-ftp.pcap", ftp_file=f"files/{x}-ftp.log",verbose=False):
+    def __init__(self,pcap_path=f"files/{x}-ftp.pcap", ftp_file=f"files/{x}-ftp.log",verbose=False,targets=""):
         self.pcap_path   = pcap_path
         self.ftp_file    = ftp_file
         self.main_thread = None
         self.usernames   = []
         self.passwords   = []
         self.addrs       = []
+        self.targets = list(targets.split("/"))
         
         init()
         logging.addLevelName(logging.CRITICAL, f"[{red}!!{reset}]")
@@ -39,10 +40,6 @@ class FTPSniff(object):
     def check_for_ftp(self,pkt):
         if pkt.haslayer(TCP) and pkt.haslayer(Raw):
             return True
-            # if pkt[TCP].dport == 21 and pkt[TCP].sport == 21:
-            #     return True
-            # else:
-            #     return False
         else:
             return False
 			
@@ -72,7 +69,8 @@ class FTPSniff(object):
                 pass
 
     def sniff_thread(self):
-        sniff(filter="port 21",prn=self.handle_pkt)
+        filter_ = f"port 21{f' and host {x}' for x in self.targets}"
+        sniff(filter=filter_,prn=self.handle_pkt)
     
     def start(self):
         logging.debug("FTP: Starting sniff thread")

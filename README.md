@@ -18,10 +18,10 @@ mitm.py
 - [x] ARP Poisoning
 - [x] FTP Sniffing
 - [x] HTTP Sniffing
-- [ ] DNS Spoofing
+- [x] DNS Spoofing
 - [ ] Captive Portal
 
-## Installation
+## :gear: Installation
 
 First, install python 3:
 

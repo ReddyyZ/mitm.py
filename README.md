@@ -65,6 +65,18 @@ And remember to add the '.' at the end.
 
 - Poisoning the ARP and executing DNS Spoofing
 ```sh
-python mitm.py --arp --dns --gateway 192.168.1.1 --targets 192.168.1.106/192.168.1.104
+python3 mitm.py --arp --dns --gateway 192.168.1.1 --targets 192.168.1.106/192.168.1.104
 ```
 > Remember to change the `config/hosts.json` file
+
+- Sniffing all http requests
+```sh
+python3 mitm.py --http -v
+```
+> All requests will be saved at `files` directory
+
+- Sniffing all FTP logins
+```sh
+python3 mitm.py --ftp -v
+```
+> All requests will be saved at `files` directory

@@ -32,11 +32,17 @@ apt-get install python3 python3-dev python3-pip
 
 Now you're ready to install the tool!
 
-- Clone the repo:                                                                                           
-``` git clone https://github.com/ReddyyZ/mitm.py ```
+- Clone the repo:
+```sh
+git clone https://github.com/ReddyyZ/mitm.py
+```
 
-- Cd into the directory and install the requirements:                                                       
-``` pip3 install -r requirements.txt ```
+- Cd into the directory and install the requirements:
+```sh
+pip3 install -r requirements.txt
+```
 
-- Happy hacking!                                                                                            
-``` python3 mitm.py --help ```
+- Happy hacking!
+```sh
+python3 mitm.py --help
+```

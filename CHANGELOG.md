@@ -9,3 +9,9 @@
 # mitm.py v1.0.1
 
 - Added DNS Spoofing attack
+
+# mitm.py v1.0.2
+
+- Added target selection on other attacks
+- Added captive portal
+- Added automatic target selection on ARP Poisoning

@@ -2,6 +2,13 @@
 
 <p align="center">Tool developed in Python 3 using Scapy for <b>MITM</b > attacks</p>
 
+<p align="center">
+    <a href="#open_file_folder-Project-Structure">Project Structure</a> | 
+    <a href="#gear-Installation">Installation</a> | 
+    <a href="#gear-Configuring">Configuring</a> | 
+    <a href="#open_book-Examples">Examples</a>
+</p>
+
 ## :open_file_folder: Project Structure
 
 ```
@@ -19,7 +26,7 @@ mitm.py
 - [x] FTP Sniffing
 - [x] HTTP Sniffing
 - [x] DNS Spoofing
-- [ ] Captive Portal
+- [x] Captive Portal
 
 ## :gear: Installation
 
@@ -27,7 +34,7 @@ First, install python 3:
 
 - On Debian and Ubuntu
 ```sh
-apt-get install python3 python3-dev python3-pip
+apt-get install python3 python3-dev python3-pip php
 ``` 
 
 Now you're ready to install the tool!

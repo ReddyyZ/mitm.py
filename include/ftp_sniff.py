@@ -69,7 +69,10 @@ class FTPSniff(object):
                 pass
 
     def sniff_thread(self):
-        filter_ = f"port 21{f' and host {x}' for x in self.targets}"
+        filter_ = "tcp port 21"
+        if len(self.targets) > 0:
+            for x in self.targets:
+                filter_ += " and host " + x
         sniff(filter=filter_,prn=self.handle_pkt)
     
     def start(self):

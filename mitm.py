@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from include import arppoison, ftp_sniff, http_sniff, dnsspoof, captive
 from colorama import init, Fore
 import argparse,textwrap,time,logging
@@ -122,4 +123,3 @@ if __name__ == "__main__":
             time.sleep(0.1)
     except KeyboardInterrupt:
         mitm.stop()
-        

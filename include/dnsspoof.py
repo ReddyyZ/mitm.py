@@ -56,8 +56,8 @@ class DNSSpoof(object):
         if pkt.haslayer(IP) and pkt.haslayer(DNS):
             if pkt[IP].src != self.local_ip and pkt[Ether].dst == self.local_mac and pkt[DNS].opcode == 0 and pkt[DNS].ancount == 0:
                 if not self.captive:
+                    conf = self.config()
                     if pkt[DNSQR].qname.decode() in list(conf.keys()):
-                        conf = self.config()
                         Thread(target=self.make_reply,args=(pkt, conf[pkt[DNSQR].qname.decode()] )).start()
                 else:
                     Thread(target=self.make_reply,args=(pkt, self.captive)).start()

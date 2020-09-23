@@ -46,7 +46,6 @@ class Captive(object):
 
     def stop(self):
         if not self.server_ip:
-            self.p.send_signal(signal.CTRL_C_EVENT)
             self.p.kill()
             self.main_thread.kill()
             logging.debug("Captive: PHP server stopped")

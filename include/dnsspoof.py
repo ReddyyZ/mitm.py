@@ -50,7 +50,7 @@ class DNSSpoof(object):
                         rrname=pkt[DNSQR].qname,
                         rdata=redirect)
         send(fake_pkt)
-        logging.debug(f"DNS: Spoofed request from {pkt[IP].src} for {name} to {redirect}")
+        logging.debug(f"DNS: Spoofed request from {pkt[IP].src} for {pkt[DNSQR].qname.decode()} to {redirect}")
 
     def handle_pkt(self,pkt):
         if pkt.haslayer(IP) and pkt.haslayer(DNS):

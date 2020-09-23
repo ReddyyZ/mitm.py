@@ -49,7 +49,7 @@ class DNSSpoof(object):
                     DNSRR(
                         rrname=pkt[DNSQR].qname,
                         rdata=redirect)
-        send(fake_pkt)
+        send(fake_pkt,verbose=0)
         logging.debug(f"DNS: Spoofed request from {pkt[IP].src} for {pkt[DNSQR].qname.decode()} to {redirect}")
 
     def handle_pkt(self,pkt):

@@ -15,3 +15,8 @@
 - Added target selection on other attacks
 - Added captive portal
 - Added automatic target selection on ARP Poisoning
+
+# mitm.py v1.0.3
+
+- Added multithreading in DNS Spoofing, to respond faster
+- Hidden php server output

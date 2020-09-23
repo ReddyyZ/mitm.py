@@ -2,7 +2,7 @@ from include import arppoison, ftp_sniff, http_sniff, dnsspoof, captive
 from colorama import init, Fore
 import argparse,textwrap,time,logging
 
-VERSION = "1.0.2"
+VERSION = "1.0.3"
 AUTHOR  = "ReddyyZ"
 
 white   = Fore.WHITE

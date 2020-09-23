@@ -2,7 +2,7 @@ from scapy.all import *
 from scapy.layers.http import HTTPRequest
 from colorama import init, Fore
 from multiprocessing import Process
-import logging, netifaces, os
+import logging, netifaces, subprocess, signal
 
 white   = Fore.WHITE
 black   = Fore.BLACK
@@ -21,6 +21,7 @@ class Captive(object):
         self.main_thread = None
         self.local_ip    = netifaces.ifaddresses(interface)[netifaces.AF_INET][0]['addr']
 
+        self.p         = None
         self.server_ip = server_ip
         self.serve_dir = serve_dir
 
@@ -32,7 +33,7 @@ class Captive(object):
         logging.basicConfig(format=f"%(levelname)s %(message)s", level=logging.DEBUG if verbose else logging.INFO)
 
     def serve(self):
-        os.system(f"php -S {self.local_ip}:80 -t {self.serve_dir}")
+        self.p = subprocess.Popen(f"php -S {self.local_ip}:80 -t {self.serve_dir}".split(" "),stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE)
 
     def start(self):
         if not self.server_ip:
@@ -45,6 +46,8 @@ class Captive(object):
 
     def stop(self):
         if not self.server_ip:
+            self.p.send_signal(signal.CTRL_C_EVENT)
+            self.p.kill()
             self.main_thread.kill()
             logging.debug("Captive: PHP server stopped")
 

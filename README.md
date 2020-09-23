@@ -88,4 +88,10 @@ python3 mitm.py --ftp -v
 ```
 > All credentials will be saved at `files` directory
 
+- Enable Captive Portal
+```sh
+python3 mitm.py --arp --dns --captive --gateway 192.168.1.1 --targets 192.168.1.106
+```
+> Redirects all requests to your captive portal
+
 <h2 align="center">&lt;/&gt; by <a href="https://github.com/ReddyyZ">ReddyyZ</a></h2>

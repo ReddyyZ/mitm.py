@@ -79,6 +79,7 @@ class MITM(object):
 
     def _captive(self):
         if self.captive:
+            logging.info("Starting Captive Portal")
             self.captive = captive.Captive(server_ip=self.captive_ip, serve_dir=self.captive_dir,verbose=self.verbose)
             self.captive_ip = self.captive.start()
 

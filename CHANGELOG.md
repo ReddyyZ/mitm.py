@@ -20,3 +20,7 @@
 
 - Added multithreading in DNS Spoofing, to respond faster
 - Hidden php server output
+
+# mitm.py v1.0.4
+
+- Bug fixes

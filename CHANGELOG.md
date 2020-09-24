@@ -24,3 +24,4 @@
 # mitm.py v1.0.4
 
 - Bug fixes
+- Added installation using apt

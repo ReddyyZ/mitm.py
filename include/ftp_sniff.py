@@ -15,7 +15,7 @@ magenta = Fore.MAGENTA
 
 class FTPSniff(object):
     x = random.randint(1000,9999)
-    def __init__(self,pcap_path=f"files/{x}-ftp.pcap", ftp_file=f"files/{x}-ftp.log",verbose=False,targets=""):
+    def __init__(self,pcap_path=f"/usr/share/mitm.py/files/{x}-ftp.pcap", ftp_file=f"/usr/share/mitm.py/files/{x}-ftp.log",verbose=False,targets=""):
         self.pcap_path   = pcap_path
         self.ftp_file    = ftp_file
         self.main_thread = None

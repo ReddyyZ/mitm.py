@@ -19,7 +19,7 @@ def percentage(percent, whole):
 
 class HttpSniff(object):
 	x = random.randint(1000,9999)
-	def __init__(self,pcap_path=f"files/{x}-http.pcap", http_file=f"files/{x}-http.log",verbose=False,targets=""):
+	def __init__(self,pcap_path=f"/usr/share/mitm.py/files/{x}-http.pcap", http_file=f"/usr/share/mitm.py/files/{x}-http.log",verbose=False,targets=""):
 		self.pcap_path = pcap_path
 		self.http_file = http_file 
 		self.main_thread = None

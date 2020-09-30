@@ -85,9 +85,9 @@ class MITM(object):
             self.captive_ip = self.captive.start()
 
     def _dns(self):
-        if self.dns:
+        if self.dns and self.arp:
             logging.info("Starting DNS Spoofing Attack")
-            self.dns = dnsspoof.DNSSpoof(verbose=self.verbose,targets=self.targets,captive=self.captive_ip)
+            self.dns = dnsspoof.DNSSpoof(verbose=self.verbose,targets=self.targets,captive=self.captive_ip,gateway=self.gateway,gateway_mac=self.arp.g_mac)
             self.dns.start()
 
     def stop(self):

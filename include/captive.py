@@ -16,7 +16,7 @@ magenta = Fore.MAGENTA
 
 class Captive(object):
     x = random.randint(1000,9999)
-    def __init__(self, server_ip="", serve_dir="/var/www/html", log_file="files/{x}-captive.log",verbose=False,interface="eth0"):
+    def __init__(self, server_ip="", serve_dir="/var/www/html", log_file="/usr/share/mitm.py/files/{x}-captive.log",verbose=False,interface="eth0"):
         self.log_file    = log_file
         self.main_thread = None
         self.local_ip    = netifaces.ifaddresses(interface)[netifaces.AF_INET][0]['addr']
